@@ -1,0 +1,40 @@
+%% ChadWallet — websocket hub + per-mint live-price store
+%% Author: Yashvardhan Gaur
+%% Refcounted subscriptions; one batch fetch per tick; render only the rows that changed
+flowchart LR
+  subgraph client["Browser"]
+    COMP["50+ token rows / chart / buy panel"]
+    STORE["livePrices store\n(per-mint external store)"]
+    RAF["coalesce -> requestAnimationFrame\n(<= 1 render/mint/frame)"]
+  end
+
+  WS{{"wss /ws"}}
+  COMP -->|"useLivePrice(mint) subscribes"| STORE
+  STORE -->|"sub / unsub mints\nsub_candles / sub_discover / sub_trades"| WS
+
+  subgraph hub["ws.Hub (Go, gorilla/websocket)"]
+    REF["refcount per mint\n(one upstream call per mint,\nregardless of viewers)"]
+    WARM["warm set\nowned + trending + big"]
+    BATCH["batch Jupiter price call\n(adaptive rate)"]
+    AGG["candle aggregation\n1s/5s/30s/1m"]
+    FEEDS["discover + trades feeds"]
+  end
+
+  WS --- REF
+  REF --> BATCH
+  WARM --> BATCH
+  BATCH -->|"{type:prices, data:{mint->price,chg}}"| WS
+  AGG -->|"{type:candle, bar}"| WS
+  FEEDS -->|"{type:discover|trades}"| WS
+
+  WS -->|"price deltas"| STORE
+  STORE --> RAF --> COMP
+
+  NOTE["Derived live market cap = staticMC x (livePrice / staticPrice)\nsupply constant -> no extra fetch"]
+
+  classDef bus fill:#0f3d2e,stroke:#22e07b,color:#d1fae5;
+  classDef store fill:#1f2937,stroke:#22e07b,color:#e5e7eb;
+  classDef note fill:#0f3d2e,stroke:#22e07b,color:#d1fae5;
+  class WS bus;
+  class STORE store;
+  class NOTE note;

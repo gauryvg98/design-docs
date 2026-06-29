@@ -1,0 +1,53 @@
+%% ChadWallet — cache-first, poller-driven fan-out
+%% Author: Yashvardhan Gaur
+%% Upstream load scales with tokens tracked, NOT with number of users
+flowchart TB
+  subgraph upstreams["Rate-limited free upstreams"]
+    GT["GeckoTerminal (~30/min)"]
+    DEX["DexScreener"]
+    JUP["Jupiter lite-api"]
+  end
+
+  subgraph writers["Writers — the ONLY path to upstreams"]
+    PT["pollTrending (~150s -> 10m TTL)"]
+    RB["RefreshBig (curated, sticky)"]
+    SM["RunSampler (sub-minute price line)"]
+    HUBJ["ws.Hub price loop\nbatch Jupiter, adaptive (1s..8s on 429)"]
+  end
+
+  BRK{"circuit breaker\nper upstream"}
+  PT --> BRK
+  RB --> BRK
+  SM --> BRK
+  HUBJ --> BRK
+  BRK -->|"closed"| upstreams
+  BRK -. "open -> serve last-good" .-> CACHE
+
+  CACHE[("in-memory TTL cache\nSnapshot = warm-or-stale")]
+  PT --> CACHE
+  RB --> CACHE
+  SM --> CACHE
+
+  subgraph readers["Readers — never touch upstreams"]
+    H1["GET /api/trending"]
+    H2["GET /api/discover"]
+    H3["GET /api/token/{mint} ..."]
+    HUBOUT["ws.Hub fan-out"]
+  end
+  CACHE -->|"Snapshot(key)"| H1 & H2 & H3
+  HUBJ -->|"price deltas"| HUBOUT
+
+  subgraph clients["Clients"]
+    C1["viewer 1"]
+    C2["viewer 2"]
+    CN["viewer N"]
+  end
+  HUBOUT --> C1 & C2 & CN
+  H1 --> C1
+
+  NOTE["1 batch upstream fetch -> all viewers.\n1 user and 1,000 users ≈ same upstream load."]
+
+  classDef store fill:#1f2937,stroke:#22e07b,color:#e5e7eb;
+  classDef note fill:#0f3d2e,stroke:#22e07b,color:#d1fae5;
+  class CACHE store;
+  class NOTE note;

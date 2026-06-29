@@ -1,0 +1,57 @@
+%% ChadWallet — system overview (Solana meme-coin trading app)
+%% Author: Yashvardhan Gaur
+%% Non-custodial; cache-first + poller-driven; one websocket hub fans out to all clients
+flowchart LR
+  subgraph browser["Browser — Next.js 16 / React 19 (Vercel)"]
+    AC["ApiClient seam\nmock.ts &harr; live.ts\n(NEXT_PUBLIC_API_BASE)"]
+    SWR["SWR hooks"]
+    LP["livePrices store\nuseSyncExternalStore + rAF"]
+    CH["lightweight-charts"]
+    PW["Privy embedded wallet\n(MPC / Shamir shares)"]
+  end
+
+  subgraph api["Go API — chi (Fly.io, 1 always-on machine)"]
+    HTTP["httpapi (REST)"]
+    HUB["ws.Hub\nprices / candles / discover / trades"]
+    PROV["composite / freedata\nProvider"]
+    UNIV["discovery universe\n(new + graduating)"]
+    subgraph rel["resilience"]
+      CACHE[("TTL cache\nstale-while-error")]
+      BRK["circuit breaker\n(per upstream)"]
+      MET["metrics -> /status"]
+    end
+    POLL["background pollers\ntrending / big / sampler"]
+  end
+
+  AC -->|"REST"| HTTP
+  SWR --- AC
+  LP <-->|"wss /ws (subscribe)"| HUB
+  CH --- LP
+
+  HTTP --> PROV
+  HTTP --> UNIV
+  HUB --> PROV
+  POLL --> PROV
+  POLL --> CACHE
+  HTTP -->|"read snapshot (no upstream)"| CACHE
+  PROV --- BRK
+  PROV --- CACHE
+
+  subgraph up["Free / keyless upstreams"]
+    DEX["DexScreener"]
+    GT["GeckoTerminal"]
+    JUP["Jupiter lite-api"]
+    HEL["Helius (key)"]
+    PP["PumpPortal"]
+    PF["pump.fun"]
+  end
+  PROV --> DEX & GT & JUP & HEL & PF
+  UNIV <-->|"wss launches / migrations"| PP
+
+  PW -->|"sign tx in browser"| PRIVY["Privy (Apple/Google + key shares)"]
+  HTTP -->|"build / broadcast / RPC proxy"| HEL
+
+  classDef store fill:#1f2937,stroke:#22e07b,color:#e5e7eb;
+  classDef bus fill:#0f3d2e,stroke:#22e07b,color:#d1fae5;
+  class CACHE store;
+  class HUB bus;

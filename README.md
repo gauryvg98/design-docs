@@ -13,6 +13,7 @@ self-contained topic with its own diagrams and notes.
 | Topic | What it covers |
 |-------|----------------|
 | [Multi-chain MPC custody platform](mpc-custody-platform/) | Event-driven architecture for a production BTC/ETH/TRON custody platform — indexer→wallet reconciliation, reorg safety, the MPC transfer pipeline, signed webhooks, and real-time WebSockets. Redis Streams + Pub/Sub on PostgreSQL. |
+| [ChadWallet — Solana trading app](chadwallet-solana-trading/) | Non-custodial real-time Solana meme-coin trading app — cache-first poller-driven backend, a websocket hub that fans one upstream fetch out to all viewers, and a browser-signed (Privy MPC) swap pipeline. Go + Next.js, no database. |
 
 <!-- Add new topics as siblings: a folder with its own README.md + diagrams/ -->
 

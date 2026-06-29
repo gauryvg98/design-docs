@@ -1,0 +1,40 @@
+%% ChadWallet — non-custodial swap execution
+%% Author: Yashvardhan Gaur
+%% Built server-side, signed in the browser, broadcast server-side. The server never holds a key.
+sequenceDiagram
+  autonumber
+  participant U as Browser (swap.ts)
+  participant API as Go API (chi)
+  participant J as Jupiter
+  participant W as Privy wallet (MPC, browser)
+  participant H as Helius RPC
+
+  U->>API: POST /api/swap/build {inputMint, outputMint, amount, slippageBps, userPublicKey}
+  API->>J: quote -> build swap (dynamic slippage + priority fee cap)
+  J-->>API: unsigned tx (base64) + lastValidBlockHeight
+  API-->>U: unsigned tx
+
+  Note over U,W: signing happens ONLY in the browser
+  U->>W: signTransaction(unsigned)
+  W-->>U: signed tx (base64)
+
+  U->>API: POST /api/swap/send {signedTransaction}
+  API->>H: sendTransaction
+  H-->>API: signature
+  API-->>U: signature
+
+  Note over U,H: confirm with rebroadcast (idempotent — same signed tx, same sig)
+  loop every 2.5s, up to ~60s
+    U->>API: GET /api/tx/{sig}
+    API->>H: getSignatureStatuses
+    H-->>API: status
+    API-->>U: pending / confirmed / failed
+    U->>API: POST /api/swap/send (rebroadcast)
+  end
+
+  Note over U,H: on confirmed
+  U->>API: GET /api/wallet/{owner}/holdings?fresh=1
+  U->>API: GET /api/wallet/{owner}/positions?fresh=1
+  API->>H: getTokenAccountsByOwner + Enhanced Txs
+  H-->>API: balances + swap history
+  API-->>U: holdings + chain-derived PnL (avg cost, realized PnL, no DB)
