@@ -1,0 +1,48 @@
+%% governance-service — custody transfer pipeline + cross-service integrations
+%% Author: Yashvardhan Gaur
+%% Multi-approval governance -> MPC signing -> broadcast -> confirmation, with policy-signature gate
+flowchart TB
+  C["Client API / Mobile"]
+
+  subgraph gov["governance-service"]
+    H["Transfer handler"]
+    POL["Policy validation\n+ re-verify policy signature\n(ECDSA P-256, canonical JSON)"]
+    SM{{"Transfer state machine"}}
+    AP["Approvals\n(N-of-M votes)"]
+    PROC["AsyncBlockchainProcessor\n(worker pool)"]
+    CHAIN["Chain service\nEVM / TRON / BTC\nbuild unsigned tx + validate"]
+    SCAN["Confirmation scanner\n(30s ticker)"]
+  end
+
+  C -->|"create transfer (signed)"| H
+  H --> POL
+  POL --> SM
+
+  SM -->|PENDING_APPROVAL| AP
+  AP -->|"required approvals met"| SM
+  SM -->|READY_TO_SEND| PROC
+  PROC --> CHAIN
+  CHAIN -->|PENDING_SIGNATURE| MPC["MPC service\ncoordinator + signers"]
+  MPC -->|"signature(s)"| CHAIN
+  CHAIN -->|"eth_sendRawTransaction"| RPC["Chain RPC"]
+  CHAIN -->|SENT + tx_hash| SM
+  SCAN -->|"poll receipt / actual fee"| RPC
+  SCAN -->|"SENT / FAILED"| SM
+
+  %% validator gate (pre-sign)
+  CHAIN -. "validate: chainId, whitelisted to,\nvalue/decimals, gas, calldata/selector" .-> VAL[/"reject -> SubStatus\n(GasEstimation / NodeRejected /\nInsufficientFunds / Validation)"/]
+
+  %% cross-service integrations (HTTP m2m)
+  POL -->|"GET device cert (verify sig)"| USER["user-service\n/m2m/v1/users/kratos/:id"]
+  CHAIN -->|"GET /m2m/v1/assets (token, decimals, price)"| WALLET["wallet-service"]
+  CHAIN -->|"GET /m2m/v1/profiles/:id/wallets (sender + addresses)"| WALLET
+  CHAIN -->|"GetBlockchainBySymbol -> chainId"| WALLET
+  CHAIN -->|"POST /v1/{eth,trx,btc}/estimate-fee"| IDX["indexers\n(fee estimation API)"]
+
+  %% outbound events
+  SM -->|"TRANSFER_CREATED / APPROVED /\nDELIVERED / FAILED"| EV["Redis Pub/Sub + webhook_events"]
+
+  classDef gate fill:#3a1f1f,stroke:#f87171,color:#fee2e2;
+  class VAL gate;
+  classDef bus fill:#0f3d2e,stroke:#22e07b,color:#d1fae5;
+  class EV bus;

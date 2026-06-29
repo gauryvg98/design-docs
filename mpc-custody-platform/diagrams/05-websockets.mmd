@@ -1,0 +1,45 @@
+%% Inbound real-time — WebSocket fan-out via event-service
+%% Author: Yashvardhan Gaur
+%% Client subscribes over wss; event-service bridges Redis Pub/Sub channels to the socket
+flowchart LR
+  CLIENT["Frontend / Mobile"]
+
+  subgraph es["event-service (WebSocket gateway)"]
+    UP["upgrade /v1/ws\n(JWT -> userID required)"]
+    SUB["subscription builder"]
+    FWD["forwarders\n(goroutine per channel)\nnormalise event_type"]
+    WP["write pump\nping 30s / pong 60s / 512B max in"]
+  end
+
+  CLIENT -->|"wss /v1/ws?profile_id=&transfer_ids=&device_ids=..."| UP
+  UP --> SUB --> FWD --> WP --> CLIENT
+
+  PUBSUB{{"Redis Pub/Sub backbone"}}
+  FWD -->|"SUBSCRIBE"| PUBSUB
+
+  subgraph scopes["Subscribed channel scopes"]
+    U["user-scoped (auto, ~23)\napprovals, signatures, certs,\nMFA, balances, security/geo"]
+    P["profile-scoped (opt-in, ~52)\nall transfers/policies/wallets/\ndevices/audit for a profile"]
+    E["entity-scoped (opt-in)\ntransfer_ids / transaction_ids /\ndevice_ids / mfa_request_ids"]
+  end
+  PUBSUB --- U
+  PUBSUB --- P
+  PUBSUB --- E
+
+  subgraph pubs["Publishers -> Pub/Sub"]
+    GOV["governance-service"]
+    WAL["wallet-service"]
+    USR["user-service"]
+    AZ["authorization-service"]
+    AUD["audit-service"]
+    SEC["security (PoP / GeoIP)"]
+  end
+  GOV --> PUBSUB
+  WAL --> PUBSUB
+  USR --> PUBSUB
+  AZ --> PUBSUB
+  AUD --> PUBSUB
+  SEC --> PUBSUB
+
+  classDef bus fill:#0f3d2e,stroke:#22e07b,color:#d1fae5;
+  class PUBSUB bus;

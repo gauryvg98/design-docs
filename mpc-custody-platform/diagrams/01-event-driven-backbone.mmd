@@ -1,0 +1,70 @@
+%% Multi-chain MPC custody platform — event-driven backbone (system context)
+%% Author: Yashvardhan Gaur
+%% Transports: Redis Streams (durable, outbox-backed) + Redis Pub/Sub (real-time fan-out)
+flowchart LR
+  subgraph chains["Blockchains"]
+    BTC_RPC["BTC RPC"]
+    ETH_RPC["EVM RPC"]
+    TRON_RPC["TRON RPC"]
+  end
+
+  subgraph indexers["Indexers — source-of-truth reconciliation"]
+    BTCI["bitcoin-indexer (C#)"]
+    ETHI["eth-indexer-csharp (C#)"]
+    TRONI["tron-indexer (C#)"]
+    GOI["indexer-service (Go)\nchain-agnostic port"]
+  end
+
+  BTC_RPC --> BTCI
+  ETH_RPC --> ETHI
+  ETH_RPC --> GOI
+  TRON_RPC --> TRONI
+
+  OUTBOX[("event_outbox\n(Postgres, per-chain)\nwritten in same txn as state")]
+  BTCI --> OUTBOX
+  ETHI --> OUTBOX
+  TRONI --> OUTBOX
+  GOI --> OUTBOX
+
+  STREAM{{"Redis Stream\nindexer:balance-updates"}}
+  OUTBOX -->|"drain + retry (backoff)\nidempotent event_id"| STREAM
+
+  WALLET["wallet-service"]
+  STREAM -->|"XREADGROUP\ngroup=wallet-service"| WALLET
+
+  subgraph domain["Domain services"]
+    WALLET
+    GOV["governance-service\ntransfers / approvals / policies"]
+    USER["user-service\ndevices / certs / identity"]
+    AUTHZ["authorization-service\nroles / scopes"]
+    AUDIT["audit-service\nimmutable log"]
+  end
+
+  MPC["MPC service\ncoordinator + signers"]
+  GOV <-->|"MPC sign (HTTP)"| MPC
+
+  PUBSUB{{"Redis Pub/Sub backbone\n{service}:{entity}:{scope}:{action}"}}
+  WALLET --> PUBSUB
+  GOV --> PUBSUB
+  USER --> PUBSUB
+  AUTHZ --> PUBSUB
+  AUDIT --> PUBSUB
+
+  WHSTREAM{{"Redis Stream\nwebhook_events"}}
+  WALLET --> WHSTREAM
+  GOV --> WHSTREAM
+  USER --> WHSTREAM
+
+  EVENTSVC["event-service\nWebSocket gateway"]
+  PUBSUB -->|"subscribe"| EVENTSVC
+  EVENTSVC -->|"wss /v1/ws (JWT)"| CLIENTS["Frontend / Mobile"]
+
+  NOTIF["notification-service\nwebhook delivery"]
+  WHSTREAM -->|"XREADGROUP\ngroup=notification-service"| NOTIF
+  NOTIF -->|"signed POST (ECDSA P-256 detached JWS)\nretry 5x backoff"| EXT["External client endpoints"]
+  NOTIF -.->|"/.well-known/jwks.json"| EXT
+
+  classDef store fill:#1f2937,stroke:#22e07b,color:#e5e7eb;
+  classDef bus fill:#0f3d2e,stroke:#22e07b,color:#d1fae5;
+  class OUTBOX store;
+  class STREAM,PUBSUB,WHSTREAM bus;

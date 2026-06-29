@@ -1,0 +1,37 @@
+%% Outbound Client-API webhooks — reliable, signed, retryable delivery
+%% Author: Yashvardhan Gaur
+%% Producers -> Redis Stream webhook_events -> notification-service -> signed HTTP -> client (verifies via JWKS)
+flowchart LR
+  subgraph producers["Producer services"]
+    GOV["governance-service\nTRANSFER_*, POLICY_*, ADDRESS_*"]
+    WAL["wallet-service\nBALANCE_UPDATED, TRANSACTION_DETECTED,\nWALLET_*, WALLET_GROUP_*"]
+    USR["user-service\nDEVICE_*, CERTIFICATE_READY, USER_*"]
+  end
+
+  WH{{"Redis Stream\nwebhook_events"}}
+  GOV -->|"XADD (enriched payload:\nuser/wallet/asset/chain/device refs)"| WH
+  WAL --> WH
+  USR --> WH
+
+  subgraph notif["notification-service"]
+    CONS["webhook_consumer\nXREADGROUP group=notification-service"]
+    MATCH["match webhook_configs\nby profile + subscribed type"]
+    DELREC[("webhook_deliveries\nidempotent: eventID + configID")]
+    SIGN["sign: ECDSA P-256\ndetached JWS (ES256)"]
+    SEND["HTTP POST"]
+    RETRY["retry 5x\n30s -> 2m -> 10m -> 30m -> 2h"]
+  end
+
+  WH --> CONS --> MATCH --> DELREC --> SIGN --> SEND
+  SEND -->|"2xx -> DELIVERED"| DONE(("done"))
+  SEND -->|"non-2xx / timeout"| RETRY --> SEND
+  RETRY -->|"exhausted -> FAILED"| DONE
+
+  SEND -->|"POST + headers:\nX-Webhook-Signature (detached JWS)\nX-Webhook-Timestamp\nX-Webhook-Event-Type / -Event-ID"| CLIENT["External client endpoint"]
+  CLIENT -->|"GET public key"| JWKS["/.well-known/jwks.json"]
+  CLIENT -->|"verify signed content = timestamp.payload"| CLIENT
+
+  classDef bus fill:#0f3d2e,stroke:#22e07b,color:#d1fae5;
+  classDef store fill:#1f2937,stroke:#22e07b,color:#e5e7eb;
+  class WH bus;
+  class DELREC store;

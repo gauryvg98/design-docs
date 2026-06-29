@@ -1,0 +1,46 @@
+%% Indexer -> wallet-service integration: reliable balance reconciliation
+%% Author: Yashvardhan Gaur
+%% Two-phase persist, confirmation gating, outbox -> Redis Stream, reorg-safe consumer
+sequenceDiagram
+  autonumber
+  participant RPC as Chain RPC
+  participant IDX as Indexer (BTC/ETH/TRON)
+  participant DB as Postgres (indexer)
+  participant OB as event_outbox
+  participant RS as Redis Stream<br/>indexer:balance-updates
+  participant WC as wallet-service<br/>BalanceUpdateConsumer
+  participant WDB as Postgres (wallet)
+
+  Note over IDX,DB: Phase 1 — PREPARE (no DB writes)
+  IDX->>RPC: fetch blocks (parallel, bounded)
+  RPC-->>IDX: blocks + logs
+  IDX->>IDX: parse, compute balance deltas, build events
+
+  Note over IDX,OB: Phase 2 — PERSIST (one atomic txn / AtomicBatchSize=10 blocks)
+  IDX->>DB: BEGIN
+  IDX->>DB: write blocks, tx_refs, balances
+  IDX->>OB: insert events (deterministic event_id, status=pending/dispatchable)
+  IDX->>DB: COMMIT (all-or-nothing)
+
+  Note over OB,RS: Drain (immediate + retry loop, exp backoff 2s..300s)
+  OB->>OB: claim rows FOR UPDATE SKIP LOCKED
+  OB->>RS: XADD data=<balance_update json> (MAXLEN ~100k)
+  RS-->>OB: ok -> status=success / else reschedule
+
+  Note over WC,WDB: Consume (group=wallet-service)
+  WC->>RS: XREADGROUP > (batch, block 5s)
+  RS-->>WC: balance_update event
+  WC->>WC: chainSymbolMap normalise (eth/evm/sepolia->eth ...)
+  WC->>WDB: UpsertWithHeight — accept only if block_height > stored
+  WC->>RS: XACK
+  WC-->>WC: publish webhook:balance-updated (async)
+
+  Note over RPC,WDB: Reorg path
+  IDX->>RPC: parent-hash mismatch detected
+  IDX->>DB: walk back to common ancestor, delete orphaned range (atomic)
+  IDX->>OB: emit subtype=reorg_rollback (corrected balance at ancestor height)
+  OB->>RS: XADD
+  WC->>WDB: ForceUpsert — bypass guard, reset height DOWN to ancestor
+  Note over WC,WDB: canonical chain replays forward via normal guard
+
+  Note over WC: Recovery — pendingRecoveryLoop every 30s.<br/>XAUTOCLAIM messages idle over 5m.<br/>Transient errors stay in PEL and retry.<br/>"not tracked" -> ACK and skip
