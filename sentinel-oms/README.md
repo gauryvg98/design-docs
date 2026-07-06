@@ -66,32 +66,44 @@ UNIQUE` (idempotency), `exec_id` PRIMARY KEY (exactly-once exposure), `filled_qt
 
 ---
 
-## Strategies
+## Strategies — a plug-in interface
 
-Strategies are **pure and edge-free**: each states a desired *stance* (`LONG` / `FLAT` /
-`SHORT`) every bar, plus optional risk hooks in the decision `detail`. The runner reconciles
-the actual position toward that target; the risk layer turns intent into size and protection.
-The point of Sentinel is execution integrity, not alpha — the strategies are deliberately
-classic.
+A strategy is one **narrow, pure contract**: evaluate a closed bar → `Decision(stance, detail)`,
+where `stance` ∈ {`LONG`, `FLAT`, `SHORT`, `None`-while-warming} and `detail` is an open dict of
+risk hooks. Two entry points exist — `on_bar(close)` and the richer `on_bar_ohlcv(Bar{high,
+low, close})` — and the runner prefers whichever the strategy exposes. Strategies are **pure
+and deterministic** (no I/O, clock, or RNG): that buys unit-testing, replay-safety, and the
+guarantee that a strategy — however sophisticated — reconciles through the same gateway a human
+does and can never corrupt the ledger.
 
-| Strategy | Signal | Risk hook it emits |
+The strategies that ship (`sma`, `sma-ls`, `regime`) are deliberately trivial — the point is
+execution integrity, not alpha. What matters is that the *interface* extends to arbitrarily
+rich signals **without touching the OMS**:
+
+- **Widen the input, not the interface.** A bar today is OHLC — price only, not even volume yet.
+  The runner already "prefers the richer method if the strategy exposes it"; the same pattern
+  adds a `FeatureBar` (volume, VWAP, realized vol, funding, open interest, order-book imbalance,
+  cross-asset features) behind an `on_features(…)`. A strategy accumulates its own window and
+  derives whatever it needs — `regime` already computes ATR, ADX, Donchian channels, z-scores
+  and realized vol from the bar stream.
+- **The output already fits ML.** `Decision(stance, detail)` maps onto a model's outputs:
+  direction → `stance`; edge / probability → `target_weight` (conviction, [0,1]); predicted
+  vol / stop → `stop_dist`. An ML model plugs in as a **pure predictor** — weights loaded once
+  at construction, deterministic inference, features from the fed inputs — so `MLStrategy(
+  model_path, feature_spec)` satisfies the same contract as an SMA; its "many parameters" are
+  just construction config. Live external data is fed *in* as features; training is offline.
+- **Risk stays orthogonal to alpha.** However the signal is derived, a strategy only ever emits
+  two risk hooks — **`stop_dist`** (*where the thesis breaks*; the risk layer sizes **and**
+  enforces the SL off the same distance) and **`target_weight`** (*how convinced*; scales the
+  size). The risk layer turns those into size, brackets and margin —
+  `qty = risk_pct · equity_share · conviction / stop_distance`, leverage-capped. Swap an SMA for
+  a neural net and the sizing / execution / reconciliation machinery is untouched. The
+  pluggability is the capability.
+
+| Strategy | Signal | Risk hook |
 |---|---|---|
-| **`sma`** | Fast/slow SMA crossover — `LONG` when fast > slow, else `FLAT` (long-only) | **`stop_dist`** = distance from price to the slow SMA (the trend line; a long is wrong once price falls back to it), floored so a near-cross entry can't give a zero-width stop |
-| **`sma-ls`** | Same crossover, **stop-and-reverse**: `SHORT` below the cross instead of `FLAT` (always in the market; spot clamps `SHORT` → `FLAT`) | same `stop_dist` geometry |
-| **`regime`** | Regime-gated: **Donchian** breakout trend engine, armed only when **ADX** says trending; a **z-score** mean-reversion overlay (buy dips) in *range* regimes | **`target_weight`** ∈ [0,1] — **vol-targeted** conviction = risk-budget / realized-vol, a risk-normalizer (not a return predictor) |
-
-**Two ways a strategy feeds the risk layer:**
-
-- **`detail["stop_dist"]` — *where* the thesis breaks.** The risk layer sizes *and* enforces
-  the stop-loss off the **same** distance, so position size and SL can never disagree. Absent
-  (e.g. `regime`), the risk layer falls back to an ATR-based stop.
-- **`detail["target_weight"]` — *how convinced*, in [0,1].** Scales the risk-sized quantity —
-  `regime` uses it to shrink size as realized volatility rises.
-
-So a strategy owns the *thesis and its stop*; the risk layer owns the *money* (size, leverage,
-brackets) — `qty = risk_pct · equity_share · conviction / stop_distance`, leverage-capped.
-This is the clean seam that lets the same risk machinery serve a trend follower and a
-mean-reverter unchanged.
+| `sma` / `sma-ls` | fast/slow SMA crossover (long-only / stop-and-reverse) | `stop_dist` = distance to the slow SMA, floored |
+| `regime` | Donchian breakout, ADX-gated, with a z-score MR overlay in range regimes | `target_weight` — vol-targeted conviction |
 
 ---
 
