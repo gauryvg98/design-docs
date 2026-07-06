@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="470" viewBox="0 0 920 470">
+<style>
+  text{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+  .box{fill:#101614;stroke:#26362f;stroke-width:1}
+  .box.hl{stroke:#22e07b} .box.warn{stroke:#fbbf24} .box.bad{stroke:#f87171}
+  .t{fill:#eaf5ef;font-size:13px;font-weight:600}
+  .th{fill:#eaf5ef;font-size:14px;font-weight:700}
+  .tk{fill:#cfe3da;font-size:11px} .ts{fill:#7d928a;font-size:11px}
+  .tg{fill:#22e07b;font-size:11px} .ta{fill:#fbbf24;font-size:13px;font-weight:600}
+  .tr{fill:#f87171;font-size:13px;font-weight:600} .tv{fill:#a78bfa;font-size:13px;font-weight:600}
+  .lane{fill:#7d928a;font-size:11px;letter-spacing:1.5px;font-weight:600}
+  .flow{stroke:#5e7268;stroke-width:1.4;fill:none}
+  .flow.g{stroke:#22e07b} .flow.a{stroke:#fbbf24}
+  .flow.dash{stroke-dasharray:4 4;stroke:#7d928a}
+  .grp{fill:none;stroke:#26362f;stroke-dasharray:3 6}
+</style>
+<rect x="0" y="0" width="920" height="470" rx="14" fill="#0d1210"/>
+  <defs>
+    <marker id="s" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#5e7268"/></marker>
+    <marker id="sg" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#22e07b"/></marker>
+  </defs>
+
+  <text class="lane" x="30" y="30">APPEND-ONLY LOG &#183; the source of truth</text>
+  <text class="lane" x="500" y="30">PROJECTIONS &#183; rebuildable by replay</text>
+
+  <!-- projections group -->
+  <rect class="grp" x="490" y="44" width="410" height="320" rx="12"/>
+
+  <!-- commands -->
+  <rect class="box" x="30" y="48" width="250" height="86" rx="10"/>
+  <text class="th" x="46" y="72">commands</text>
+  <text class="tk" x="46" y="92">seq PK &#183; command_id UNIQUE</text>
+  <text class="ts" x="46" y="110">kind &#183; payload &#183; received_at</text>
+  <text class="tg" x="46" y="127">command_id UNIQUE &#8594; idempotent (R1.2)</text>
+
+  <!-- events -->
+  <rect class="box hl" x="30" y="170" width="250" height="104" rx="10"/>
+  <text class="th" x="46" y="194">events <tspan class="ts">&#183; append-only</tspan></text>
+  <text class="tk" x="46" y="214">seq PK &#183; event_id UNIQUE</text>
+  <text class="ts" x="46" y="232">order_id &#183; kind</text>
+  <text class="ts" x="46" y="250">from_state &#8594; to_state &#183; payload</text>
+  <text class="tg" x="46" y="267">the recovery + audit spine (R1.11)</text>
+
+  <path class="flow" d="M155 134 V170" marker-end="url(#s)"/><text class="ts" x="162" y="158">produces</text>
+
+  <!-- orders -->
+  <rect class="box" x="510" y="60" width="370" height="104" rx="10"/>
+  <text class="th" x="526" y="84">orders</text>
+  <text class="tk" x="526" y="104">order_id PK &#183; client_order_id UNIQUE</text>
+  <text class="ts" x="526" y="122">state &#183; side &#183; qty &#183; filled_qty</text>
+  <text class="ts" x="526" y="140">authority &#183; limit_price &#183; broker_order_id</text>
+  <text class="ts" x="526" y="157" style="fill:#7d928a">CHECK filled_qty &#8804; qty</text>
+
+  <!-- fills -->
+  <rect class="box" x="510" y="196" width="370" height="86" rx="10"/>
+  <text class="th" x="526" y="220">fills</text>
+  <text class="tk" x="526" y="240">exec_id PK &#183; order_id &#8594; orders</text>
+  <text class="ts" x="526" y="258">qty &#183; price &#183; event_seq</text>
+  <text class="tg" x="526" y="275">exec_id PK &#8594; exactly-once exposure (R1.5/1.7)</text>
+
+  <!-- positions -->
+  <rect class="box" x="510" y="312" width="200" height="42" rx="10"/>
+  <text class="th" x="526" y="332">positions</text>
+  <text class="ts" x="526" y="348">instrument PK &#183; qty</text>
+
+  <!-- events -> orders (fold) -->
+  <path class="flow g" d="M280 200 C400 200 400 112 510 112" marker-end="url(#sg)"/>
+  <text class="tg" x="330" y="150">transition() folds</text>
+  <!-- events -> fills (fold) -->
+  <path class="flow g" d="M280 232 C400 232 420 238 510 238" marker-end="url(#sg)"/>
+  <!-- fills -> orders (FK) -->
+  <path class="flow dash" d="M695 196 V164" marker-end="url(#s)"/><text class="ts" x="700" y="184">FK</text>
+  <!-- fills -> positions (aggregate) -->
+  <path class="flow" d="M600 282 V312" marker-end="url(#s)"/><text class="ts" x="606" y="302">&#931; net</text>
+  <!-- rebuild by replay -->
+  <path class="flow dash" d="M760 354 C820 354 820 300 300 274" marker-end="url(#s)"/>
+  <text class="ts" x="600" y="372">drop projections &#8594; rebuild by replay</text>
+
+  <!-- auxiliary -->
+  <rect class="box" x="30" y="330" width="250" height="72" rx="10"/>
+  <text class="th" x="46" y="354">decision_log</text>
+  <text class="ts" x="46" y="373">actor &#183; decision &#183; detail</text>
+  <text class="ts" x="46" y="391" style="fill:#7d928a">WHY &#8212; incl. blocked / clamped trades</text>
+
+  <rect class="box" x="730" y="312" width="150" height="42" rx="10"/>
+  <text class="th" x="746" y="332">checkpoints</text>
+  <text class="ts" x="746" y="348">name PK &#183; last_seq</text>
+</svg>

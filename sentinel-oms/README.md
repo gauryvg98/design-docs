@@ -14,6 +14,8 @@ exposure the exchange doesn't hold.
 
 — **Yashvardhan Gaur** · [github.com/gauryvg98](https://github.com/gauryvg98)
 
+> **Low-level design** — DB schema, component breakdown and glossary: **[lld.md](lld.md)**.
+
 ---
 
 ## Diagrams
@@ -53,6 +55,43 @@ A pure connectivity **timeout** means we learned nothing — retry, never halt. 
 disagreement about exposure stops the account.
 
 ![Reconciliation decision](diagrams/04-reconciliation-decision.svg)
+
+### 5. Data model
+An append-only log is the truth; `orders` / `positions` / `fills` are projections folded from
+it and rebuildable by replay. The safety properties live in **DB constraints** — `command_id
+UNIQUE` (idempotency), `exec_id` PRIMARY KEY (exactly-once exposure), `filled_qty <= qty`
+(no overfill). Full per-table docs in **[lld.md](lld.md)**.
+
+![Database schema](diagrams/05-db-schema.svg)
+
+---
+
+## Strategies
+
+Strategies are **pure and edge-free**: each states a desired *stance* (`LONG` / `FLAT` /
+`SHORT`) every bar, plus optional risk hooks in the decision `detail`. The runner reconciles
+the actual position toward that target; the risk layer turns intent into size and protection.
+The point of Sentinel is execution integrity, not alpha — the strategies are deliberately
+classic.
+
+| Strategy | Signal | Risk hook it emits |
+|---|---|---|
+| **`sma`** | Fast/slow SMA crossover — `LONG` when fast > slow, else `FLAT` (long-only) | **`stop_dist`** = distance from price to the slow SMA (the trend line; a long is wrong once price falls back to it), floored so a near-cross entry can't give a zero-width stop |
+| **`sma-ls`** | Same crossover, **stop-and-reverse**: `SHORT` below the cross instead of `FLAT` (always in the market; spot clamps `SHORT` → `FLAT`) | same `stop_dist` geometry |
+| **`regime`** | Regime-gated: **Donchian** breakout trend engine, armed only when **ADX** says trending; a **z-score** mean-reversion overlay (buy dips) in *range* regimes | **`target_weight`** ∈ [0,1] — **vol-targeted** conviction = risk-budget / realized-vol, a risk-normalizer (not a return predictor) |
+
+**Two ways a strategy feeds the risk layer:**
+
+- **`detail["stop_dist"]` — *where* the thesis breaks.** The risk layer sizes *and* enforces
+  the stop-loss off the **same** distance, so position size and SL can never disagree. Absent
+  (e.g. `regime`), the risk layer falls back to an ATR-based stop.
+- **`detail["target_weight"]` — *how convinced*, in [0,1].** Scales the risk-sized quantity —
+  `regime` uses it to shrink size as realized volatility rises.
+
+So a strategy owns the *thesis and its stop*; the risk layer owns the *money* (size, leverage,
+brackets) — `qty = risk_pct · equity_share · conviction / stop_distance`, leverage-capped.
+This is the clean seam that lets the same risk machinery serve a trend follower and a
+mean-reverter unchanged.
 
 ---
 
