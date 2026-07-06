@@ -1,92 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470" role="img" aria-label="System architecture">
-<style>
-  text{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
-  .box{fill:#101614;stroke:#26362f;stroke-width:1}
-  .box.hl{stroke:#22e07b} .box.warn{stroke:#fbbf24} .box.bad{stroke:#f87171}
-  .box.led{fill:#0c1512;stroke:#1d2a25}
-  .t{fill:#eaf5ef;font-size:13px;font-weight:600}
-  .ts{fill:#7d928a;font-size:11px}
-  .tg{fill:#22e07b;font-size:11px} .ta{fill:#fbbf24;font-size:11px}
-  .tr{fill:#f87171;font-size:11px} .tv{fill:#a78bfa;font-size:11px}
-  .flow{stroke:#5e7268;stroke-width:1.4;fill:none}
-  .flow.g{stroke:#22e07b} .flow.a{stroke:#fbbf24} .flow.r{stroke:#f87171}
-  .flow.dash{stroke-dasharray:4 4;stroke:#7d928a}
-  .grp{fill:none;stroke:#1d2a25;stroke-dasharray:3 5}
-</style>
-<rect x="0" y="0" width="960" height="470" rx="14" fill="#0d1210"/>
-    <defs><marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#5e7268"/></marker>
-    <marker id="ahg" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#22e07b"/></marker></defs>
+<rect x="0" y="0" width="960" height="470" rx="14" fill="#0d1210" />
+    <defs><marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#5e7268" /></marker>
+    <marker id="ahg" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#22e07b" /></marker></defs>
 
-    <!-- browser -->
-    <rect class="box" x="24" y="150" width="180" height="170" rx="12"/>
-    <text class="t" x="44" y="180">Browser UI</text>
-    <text class="ts" x="44" y="202">lightweight-charts</text>
-    <text class="ts" x="44" y="220">status &#183; logs &#183; risk</text>
-    <text class="ts" x="44" y="238">markers &#183; SL/TP</text>
-    <text class="tg" x="44" y="296">pushes: nothing</text>
-    <text class="tg" x="44" y="312">receives: topics</text>
+    
+    <rect x="24" y="150" width="180" height="170" rx="12" fill="#101614" stroke="#26362f" stroke-width="1" />
+    <text x="44" y="180" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">Browser UI</text>
+    <text x="44" y="202" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">lightweight-charts</text>
+    <text x="44" y="220" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">status · logs · risk</text>
+    <text x="44" y="238" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">markers · SL/TP</text>
+    <text x="44" y="296" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#22e07b" font-size="11px">pushes: nothing</text>
+    <text x="44" y="312" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#22e07b" font-size="11px">receives: topics</text>
 
-    <path class="flow g" d="M204 210 H250" marker-end="url(#ahg)"/>
-    <text class="tg" x="206" y="200">WS</text>
-    <path class="flow dash" d="M250 250 H204" marker-end="url(#ah)"/>
+    <path d="M204 210 H250" marker-end="url(#ahg)" stroke="#22e07b" stroke-width="1.4" fill="none" />
+    <text x="206" y="200" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#22e07b" font-size="11px">WS</text>
+    <path d="M250 250 H204" marker-end="url(#ah)" stroke="#7d928a" stroke-width="1.4" fill="none" stroke-dasharray="4 4" />
 
-    <!-- SentinelApp group -->
-    <rect class="grp" x="250" y="40" width="430" height="390" rx="14"/>
-    <text class="ts" x="266" y="62" style="fill:var(--green)">SentinelApp &#183; one per account</text>
+    
+    <rect x="250" y="40" width="430" height="390" rx="14" fill="none" stroke="#1d2a25" stroke-dasharray="3 5" />
+    <text x="266" y="62" style="fill:var(--green)" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">SentinelApp · one per account</text>
 
-    <rect class="box" x="270" y="80" width="180" height="52" rx="9"/>
-    <text class="t" x="286" y="102">CommandGateway</text><text class="ts" x="286" y="120">+ guards (R1.x rules)</text>
-    <rect class="box" x="470" y="80" width="190" height="52" rx="9"/>
-    <text class="t" x="486" y="102">OrderEngine</text><text class="ts" x="486" y="120">applies events &#8594; state</text>
+    <rect x="270" y="80" width="180" height="52" rx="9" fill="#101614" stroke="#26362f" stroke-width="1" />
+    <text x="286" y="102" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">CommandGateway</text><text x="286" y="120" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">+ guards (R1.x rules)</text>
+    <rect x="470" y="80" width="190" height="52" rx="9" fill="#101614" stroke="#26362f" stroke-width="1" />
+    <text x="486" y="102" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">OrderEngine</text><text x="486" y="120" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">applies events → state</text>
 
-    <rect class="box hl" x="270" y="150" width="390" height="72" rx="9"/>
-    <text class="t" x="286" y="176">Event ledger  &#183;  append-only</text>
-    <text class="ts" x="286" y="196">events &#8594; projections: orders &#183; positions &#183; fills</text>
-    <text class="tg" x="286" y="213">the single source of truth for intent &amp; history</text>
+    <rect x="270" y="150" width="390" height="72" rx="9" fill="#101614" stroke="#22e07b" stroke-width="1" />
+    <text x="286" y="176" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">Event ledger  ·  append-only</text>
+    <text x="286" y="196" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">events → projections: orders · positions · fills</text>
+    <text x="286" y="213" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#22e07b" font-size="11px">the single source of truth for intent &amp; history</text>
 
-    <rect class="box" x="270" y="240" width="125" height="52" rx="9"/>
-    <text class="t" x="286" y="262">Reconciler</text><text class="ts" x="286" y="280">halt/retry</text>
-    <rect class="box" x="405" y="240" width="120" height="52" rx="9"/>
-    <text class="t" x="421" y="262">Supervisor</text><text class="ts" x="421" y="280">halt on fatal</text>
-    <rect class="box" x="535" y="240" width="125" height="52" rx="9"/>
-    <text class="t" x="551" y="262">Writer lock</text><text class="ts" x="551" y="280">single-writer</text>
+    <rect x="270" y="240" width="125" height="52" rx="9" fill="#101614" stroke="#26362f" stroke-width="1" />
+    <text x="286" y="262" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">Reconciler</text><text x="286" y="280" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">halt/retry</text>
+    <rect x="405" y="240" width="120" height="52" rx="9" fill="#101614" stroke="#26362f" stroke-width="1" />
+    <text x="421" y="262" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">Supervisor</text><text x="421" y="280" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">halt on fatal</text>
+    <rect x="535" y="240" width="125" height="52" rx="9" fill="#101614" stroke="#26362f" stroke-width="1" />
+    <text x="551" y="262" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">Writer lock</text><text x="551" y="280" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">single-writer</text>
 
-    <!-- bots -->
-    <rect class="grp" x="270" y="312" width="390" height="100" rx="10"/>
-    <text class="ts" x="286" y="332">InstrumentManager &#183; N independent bots</text>
-    <rect class="box" x="286" y="342" width="112" height="56" rx="8"/>
-    <text class="t" x="298" y="364">Bot &#183; BTC</text><text class="ts" x="298" y="382">feed&#183;bars&#183;strat</text>
-    <rect class="box" x="408" y="342" width="112" height="56" rx="8"/>
-    <text class="t" x="420" y="364">Bot &#183; ETH</text><text class="ts" x="420" y="382">runner&#183;terminal</text>
-    <rect class="box" x="530" y="342" width="112" height="56" rx="8"/>
-    <text class="ts" x="548" y="376">&#8230;others</text>
+    
+    <rect x="270" y="312" width="390" height="100" rx="10" fill="none" stroke="#1d2a25" stroke-dasharray="3 5" />
+    <text x="286" y="332" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">InstrumentManager · N independent bots</text>
+    <rect x="286" y="342" width="112" height="56" rx="8" fill="#101614" stroke="#26362f" stroke-width="1" />
+    <text x="298" y="364" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">Bot · BTC</text><text x="298" y="382" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">feed·bars·strat</text>
+    <rect x="408" y="342" width="112" height="56" rx="8" fill="#101614" stroke="#26362f" stroke-width="1" />
+    <text x="420" y="364" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">Bot · ETH</text><text x="420" y="382" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">runner·terminal</text>
+    <rect x="530" y="342" width="112" height="56" rx="8" fill="#101614" stroke="#26362f" stroke-width="1" />
+    <text x="548" y="376" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">…others</text>
 
-    <!-- ledger db -->
-    <rect class="box led" x="252" y="150" width="0" height="0"/>
-    <path class="flow" d="M460 186 H500" /><!-- spacer, invisible-ish -->
-    <path class="flow" d="M565 222 V240" marker-end="url(#ah)"/>
-    <path class="flow" d="M360 222 V240" marker-end="url(#ah)"/>
-    <path class="flow" d="M360 132 V150" marker-end="url(#ah)"/>
-    <path class="flow" d="M565 132 V150" marker-end="url(#ah)"/>
+    
+    <rect x="252" y="150" width="0" height="0" fill="#0c1512" stroke="#1d2a25" stroke-width="1" />
+    <path d="M460 186 H500" stroke="#5e7268" stroke-width="1.4" fill="none" />
+    <path d="M565 222 V240" marker-end="url(#ah)" stroke="#5e7268" stroke-width="1.4" fill="none" />
+    <path d="M360 222 V240" marker-end="url(#ah)" stroke="#5e7268" stroke-width="1.4" fill="none" />
+    <path d="M360 132 V150" marker-end="url(#ah)" stroke="#5e7268" stroke-width="1.4" fill="none" />
+    <path d="M565 132 V150" marker-end="url(#ah)" stroke="#5e7268" stroke-width="1.4" fill="none" />
 
-    <!-- postgres -->
-    <rect class="box led" x="740" y="150" width="180" height="72" rx="10"/>
-    <text class="t" x="760" y="180">PostgreSQL</text>
-    <text class="ts" x="760" y="200">events (append-only)</text>
-    <text class="ts" x="760" y="216">+ rebuildable projections</text>
-    <path class="flow" d="M660 186 H740" marker-end="url(#ah)"/>
-    <path class="flow" d="M740 210 H662" marker-end="url(#ah)"/>
+    
+    <rect x="740" y="150" width="180" height="72" rx="10" fill="#0c1512" stroke="#1d2a25" stroke-width="1" />
+    <text x="760" y="180" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">PostgreSQL</text>
+    <text x="760" y="200" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">events (append-only)</text>
+    <text x="760" y="216" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">+ rebuildable projections</text>
+    <path d="M660 186 H740" marker-end="url(#ah)" stroke="#5e7268" stroke-width="1.4" fill="none" />
+    <path d="M740 210 H662" marker-end="url(#ah)" stroke="#5e7268" stroke-width="1.4" fill="none" />
 
-    <!-- venue / exchange -->
-    <rect class="box" x="740" y="260" width="180" height="60" rx="10"/>
-    <text class="t" x="760" y="286">Venue adapter</text>
-    <text class="ts" x="760" y="304">Binance &#183; Bybit &#183; spot</text>
-    <path class="flow" d="M660 280 H740" marker-end="url(#ah)"/>
+    
+    <rect x="740" y="260" width="180" height="60" rx="10" fill="#101614" stroke="#26362f" stroke-width="1" />
+    <text x="760" y="286" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">Venue adapter</text>
+    <text x="760" y="304" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">Binance · Bybit · spot</text>
+    <path d="M660 280 H740" marker-end="url(#ah)" stroke="#5e7268" stroke-width="1.4" fill="none" />
 
-    <rect class="box" x="740" y="352" width="180" height="52" rx="10"/>
-    <text class="t" x="760" y="378">Exchange</text><text class="ts" x="760" y="396">REST + user-data WS</text>
-    <path class="flow g" d="M830 320 V352" marker-end="url(#ahg)"/>
-    <path class="flow" d="M855 352 V322" marker-end="url(#ah)"/>
-    <text class="ts" x="866" y="342">fills</text>
+    <rect x="740" y="352" width="180" height="52" rx="10" fill="#101614" stroke="#26362f" stroke-width="1" />
+    <text x="760" y="378" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">Exchange</text><text x="760" y="396" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">REST + user-data WS</text>
+    <path d="M830 320 V352" marker-end="url(#ahg)" stroke="#22e07b" stroke-width="1.4" fill="none" />
+    <path d="M855 352 V322" marker-end="url(#ah)" stroke="#5e7268" stroke-width="1.4" fill="none" />
+    <text x="866" y="342" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">fills</text>
   </svg>

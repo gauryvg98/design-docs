@@ -1,82 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="920" height="440" viewBox="0 0 920 440">
-<style>
-  text{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
-  .box{fill:#101614;stroke:#26362f;stroke-width:1}
-  .box.hl{stroke:#22e07b} .box.warn{stroke:#fbbf24} .box.bad{stroke:#f87171}
-  .t{fill:#eaf5ef;font-size:13px;font-weight:600}
-  .th{fill:#eaf5ef;font-size:14px;font-weight:700}
-  .tk{fill:#cfe3da;font-size:11px} .ts{fill:#7d928a;font-size:11px}
-  .tg{fill:#22e07b;font-size:11px} .ta{fill:#fbbf24;font-size:13px;font-weight:600}
-  .tr{fill:#f87171;font-size:13px;font-weight:600} .tv{fill:#a78bfa;font-size:13px;font-weight:600}
-  .lane{fill:#7d928a;font-size:11px;letter-spacing:1.5px;font-weight:600}
-  .flow{stroke:#5e7268;stroke-width:1.4;fill:none}
-  .flow.g{stroke:#22e07b} .flow.a{stroke:#fbbf24}
-  .flow.dash{stroke-dasharray:4 4;stroke:#7d928a}
-  .grp{fill:none;stroke:#26362f;stroke-dasharray:3 6}
-</style>
-<rect x="0" y="0" width="920" height="440" rx="14" fill="#0d1210"/>
+<rect x="0" y="0" width="920" height="440" rx="14" fill="#0d1210" />
   <defs>
-    <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#5e7268"/></marker>
-    <marker id="ag" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#22e07b"/></marker>
-    <marker id="aa" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#fbbf24"/></marker>
-    <marker id="av" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#a78bfa"/></marker>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#5e7268" /></marker>
+    <marker id="ag" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#22e07b" /></marker>
+    <marker id="aa" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#fbbf24" /></marker>
+    <marker id="av" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#a78bfa" /></marker>
   </defs>
 
-  <!-- ===== LANE LABELS ===== -->
-  <text class="lane" x="30" y="34">LIVE LIFECYCLE</text>
-  <text class="lane" x="710" y="34">TERMINAL</text>
-  <text class="lane" x="30" y="300" style="fill:#a78bfa">RECOVERY &#183; only reconciliation exits these</text>
+  
+  <text x="30" y="34" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px" letter-spacing="1.5px" font-weight="600">LIVE LIFECYCLE</text>
+  <text x="710" y="34" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px" letter-spacing="1.5px" font-weight="600">TERMINAL</text>
+  <text x="30" y="300" style="fill:#a78bfa" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px" letter-spacing="1.5px" font-weight="600">RECOVERY · only reconciliation exits these</text>
 
-  <!-- ===== terminal container ===== -->
-  <rect class="grp" x="690" y="44" width="200" height="176" rx="12"/>
+  
+  <rect x="690" y="44" width="200" height="176" rx="12" fill="none" stroke="#26362f" stroke-dasharray="3 6" />
 
-  <!-- ===== recovery container ===== -->
-  <rect class="grp" x="24" y="312" width="600" height="104" rx="12" style="stroke:#3a2f52"/>
+  
+  <rect x="24" y="312" width="600" height="104" rx="12" style="stroke:#3a2f52" fill="none" stroke="#26362f" stroke-dasharray="3 6" />
 
-  <!-- ===== HAPPY PATH (row y=64) ===== -->
-  <rect class="box" x="30" y="64" width="104" height="46" rx="9"/><text class="t" x="82" y="92" text-anchor="middle">CREATED</text>
-  <rect class="box" x="196" y="64" width="120" height="46" rx="9"/><text class="t" x="256" y="92" text-anchor="middle">SUBMITTING</text>
-  <rect class="box hl" x="378" y="64" width="104" height="46" rx="9"/><text class="t" x="430" y="92" text-anchor="middle">WORKING</text>
-  <rect class="box hl" x="544" y="64" width="104" height="46" rx="9"/><text class="t" x="596" y="92" text-anchor="middle">PARTIAL</text>
-  <rect class="box" x="710" y="64" width="160" height="46" rx="9"/><text class="tg" x="790" y="92" text-anchor="middle">FILLED</text>
+  
+  <rect x="30" y="64" width="104" height="46" rx="9" fill="#101614" stroke="#26362f" stroke-width="1" /><text x="82" y="92" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">CREATED</text>
+  <rect x="196" y="64" width="120" height="46" rx="9" fill="#101614" stroke="#26362f" stroke-width="1" /><text x="256" y="92" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">SUBMITTING</text>
+  <rect x="378" y="64" width="104" height="46" rx="9" fill="#101614" stroke="#22e07b" stroke-width="1" /><text x="430" y="92" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">WORKING</text>
+  <rect x="544" y="64" width="104" height="46" rx="9" fill="#101614" stroke="#22e07b" stroke-width="1" /><text x="596" y="92" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">PARTIAL</text>
+  <rect x="710" y="64" width="160" height="46" rx="9" fill="#101614" stroke="#26362f" stroke-width="1" /><text x="790" y="92" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#22e07b" font-size="11px">FILLED</text>
 
-  <!-- happy arrows -->
-  <path class="flow g" d="M134 87 H196" marker-end="url(#ag)"/><text class="ts" x="150" y="79">submit</text>
-  <path class="flow g" d="M316 87 H378" marker-end="url(#ag)"/><text class="ts" x="330" y="79">acked</text>
-  <path class="flow g" d="M482 87 H544" marker-end="url(#ag)"/><text class="ts" x="502" y="79">fill</text>
-  <path class="flow g" d="M648 87 H710" marker-end="url(#ag)"/><text class="ts" x="654" y="79">filled</text>
-  <!-- partial self loop -->
-  <path class="flow g" d="M572 64 C572 40 620 40 620 62" marker-end="url(#ag)"/><text class="ts" x="600" y="36" text-anchor="middle">+fills</text>
+  
+  <path d="M134 87 H196" marker-end="url(#ag)" stroke="#22e07b" stroke-width="1.4" fill="none" /><text x="150" y="79" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">submit</text>
+  <path d="M316 87 H378" marker-end="url(#ag)" stroke="#22e07b" stroke-width="1.4" fill="none" /><text x="330" y="79" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">acked</text>
+  <path d="M482 87 H544" marker-end="url(#ag)" stroke="#22e07b" stroke-width="1.4" fill="none" /><text x="502" y="79" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">fill</text>
+  <path d="M648 87 H710" marker-end="url(#ag)" stroke="#22e07b" stroke-width="1.4" fill="none" /><text x="654" y="79" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">filled</text>
+  
+  <path d="M572 64 C572 40 620 40 620 62" marker-end="url(#ag)" stroke="#22e07b" stroke-width="1.4" fill="none" /><text x="600" y="36" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">+fills</text>
 
-  <!-- ===== MID ROW (y=150): REJECTED, CANCEL_PENDING, CANCELED ===== -->
-  <rect class="box bad" x="196" y="150" width="120" height="44" rx="9"/><text class="tr" x="256" y="177" text-anchor="middle">REJECTED</text>
-  <rect class="box warn" x="430" y="150" width="164" height="44" rx="9"/><text class="ta" x="512" y="177" text-anchor="middle">CANCEL_PENDING</text>
-  <rect class="box bad" x="710" y="150" width="160" height="44" rx="9"/><text class="tr" x="790" y="177" text-anchor="middle">CANCELED</text>
+  
+  <rect x="196" y="150" width="120" height="44" rx="9" fill="#101614" stroke="#f87171" stroke-width="1" /><text x="256" y="177" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#f87171" font-size="13px" font-weight="600">REJECTED</text>
+  <rect x="430" y="150" width="164" height="44" rx="9" fill="#101614" stroke="#fbbf24" stroke-width="1" /><text x="512" y="177" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#fbbf24" font-size="13px" font-weight="600">CANCEL_PENDING</text>
+  <rect x="710" y="150" width="160" height="44" rx="9" fill="#101614" stroke="#f87171" stroke-width="1" /><text x="790" y="177" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#f87171" font-size="13px" font-weight="600">CANCELED</text>
 
-  <!-- SUBMITTING -> REJECTED (straight down) -->
-  <path class="flow" d="M256 110 V150" marker-end="url(#a)"/><text class="ts" x="262" y="136">reject</text>
-  <!-- WORKING -> CANCEL_PENDING ; PARTIAL -> CANCEL_PENDING (elbows into the top) -->
-  <path class="flow" d="M430 110 V132 H478 V150" marker-end="url(#a)"/>
-  <path class="flow" d="M596 110 V132 H548 V150" marker-end="url(#a)"/>
-  <text class="ts" x="430" y="126" text-anchor="middle">cancel</text>
-  <!-- CANCEL_PENDING -> CANCELED -->
-  <path class="flow" d="M594 172 H710" marker-end="url(#a)"/><text class="ts" x="618" y="164">confirmed</text>
-  <!-- unsolicited STP cancel: PARTIAL bottom-right down and across (dashed, single line) -->
-  <path class="flow dash" d="M648 96 H672 V210 H790 V194" marker-end="url(#a)"/><text class="ts" x="676" y="228">unsolicited cancel (STP)</text>
+  
+  <path d="M256 110 V150" marker-end="url(#a)" stroke="#5e7268" stroke-width="1.4" fill="none" /><text x="262" y="136" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">reject</text>
+  
+  <path d="M430 110 V132 H478 V150" marker-end="url(#a)" stroke="#5e7268" stroke-width="1.4" fill="none" />
+  <path d="M596 110 V132 H548 V150" marker-end="url(#a)" stroke="#5e7268" stroke-width="1.4" fill="none" />
+  <text x="430" y="126" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">cancel</text>
+  
+  <path d="M594 172 H710" marker-end="url(#a)" stroke="#5e7268" stroke-width="1.4" fill="none" /><text x="618" y="164" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">confirmed</text>
+  
+  <path d="M648 96 H672 V210 H790 V194" marker-end="url(#a)" stroke="#7d928a" stroke-width="1.4" fill="none" stroke-dasharray="4 4" /><text x="676" y="228" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">unsolicited cancel (STP)</text>
 
-  <!-- ===== RECOVERY (row y=336) ===== -->
-  <rect class="box warn" x="44" y="336" width="120" height="46" rx="9"/><text class="ta" x="104" y="364" text-anchor="middle">UNKNOWN</text>
-  <rect class="box" x="232" y="336" width="160" height="46" rx="9" style="stroke:#a78bfa"/><text class="tv" x="312" y="364" text-anchor="middle">RECONCILING</text>
+  
+  <rect x="44" y="336" width="120" height="46" rx="9" fill="#101614" stroke="#fbbf24" stroke-width="1" /><text x="104" y="364" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#fbbf24" font-size="13px" font-weight="600">UNKNOWN</text>
+  <rect x="232" y="336" width="160" height="46" rx="9" style="stroke:#a78bfa" fill="#101614" stroke="#26362f" stroke-width="1" /><text x="312" y="364" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#a78bfa" font-size="13px" font-weight="600">RECONCILING</text>
 
-  <!-- SUBMITTING -> UNKNOWN (down the far left, no crossings) -->
-  <path class="flow a" d="M196 96 H104 V336" marker-end="url(#aa)"/><text class="ta" x="112" y="240">timeout</text>
-  <!-- UNKNOWN -> RECONCILING -->
-  <path class="flow a" d="M164 359 H232" marker-end="url(#aa)"/><text class="ts" x="176" y="351">reconcile</text>
-  <!-- RECONCILING -> resolve to broker truth (ONE arrow up to the terminal/live area) -->
-  <path class="flow" style="stroke:#a78bfa" d="M392 352 H430 V300 H820 V220" marker-end="url(#av)"/>
-  <text class="tv" x="500" y="292">resolve &#8594; broker truth (any state)</text>
-  <!-- terminal reopen (ONE dashed arrow back to RECONCILING) -->
-  <path class="flow dash" d="M690 176 H656 V404 H312 V382" marker-end="url(#a)"/>
-  <text class="ts" x="470" y="400">reopen only here</text>
+  
+  <path d="M196 96 H104 V336" marker-end="url(#aa)" stroke="#fbbf24" stroke-width="1.4" fill="none" /><text x="112" y="240" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#fbbf24" font-size="13px" font-weight="600">timeout</text>
+  
+  <path d="M164 359 H232" marker-end="url(#aa)" stroke="#fbbf24" stroke-width="1.4" fill="none" /><text x="176" y="351" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">reconcile</text>
+  
+  <path style="stroke:#a78bfa" d="M392 352 H430 V300 H820 V220" marker-end="url(#av)" stroke="#5e7268" stroke-width="1.4" fill="none" />
+  <text x="500" y="292" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#a78bfa" font-size="13px" font-weight="600">resolve → broker truth (any state)</text>
+  
+  <path d="M690 176 H656 V404 H312 V382" marker-end="url(#a)" stroke="#7d928a" stroke-width="1.4" fill="none" stroke-dasharray="4 4" />
+  <text x="470" y="400" font-family="ui-monospace,&quot;SF Mono&quot;,Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">reopen only here</text>
 </svg>
