@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="200" viewBox="0 0 940 200" role="img" aria-label="Event-sourced write path">
+<style>
+  text{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+  .box{fill:#101614;stroke:#26362f;stroke-width:1}
+  .box.hl{stroke:#22e07b} .box.warn{stroke:#fbbf24} .box.bad{stroke:#f87171}
+  .box.led{fill:#0c1512;stroke:#1d2a25}
+  .t{fill:#eaf5ef;font-size:13px;font-weight:600}
+  .ts{fill:#7d928a;font-size:11px}
+  .tg{fill:#22e07b;font-size:11px} .ta{fill:#fbbf24;font-size:11px}
+  .tr{fill:#f87171;font-size:11px} .tv{fill:#a78bfa;font-size:11px}
+  .flow{stroke:#5e7268;stroke-width:1.4;fill:none}
+  .flow.g{stroke:#22e07b} .flow.a{stroke:#fbbf24} .flow.r{stroke:#f87171}
+  .flow.dash{stroke-dasharray:4 4;stroke:#7d928a}
+  .grp{fill:none;stroke:#1d2a25;stroke-dasharray:3 5}
+</style>
+<rect x="0" y="0" width="940" height="200" rx="14" fill="#0d1210"/>
+    <defs><marker id="ah2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#5e7268"/></marker></defs>
+    <rect class="box" x="16" y="70" width="150" height="60" rx="10"/>
+    <text class="t" x="34" y="96">Command</text><text class="ts" x="34" y="115">place / cancel</text>
+    <path class="flow" d="M166 100 H206" marker-end="url(#ah2)"/>
+    <rect class="box" x="206" y="70" width="160" height="60" rx="10"/>
+    <text class="t" x="224" y="96">Guards</text><text class="ts" x="224" y="115">R1.x invariants</text>
+    <path class="flow" d="M366 100 H406" marker-end="url(#ah2)"/>
+    <rect class="box hl" x="406" y="60" width="180" height="80" rx="10"/>
+    <text class="t" x="424" y="88">append event</text><text class="tg" x="424" y="108">events (immutable)</text><text class="ts" x="424" y="126">the source of truth</text>
+    <path class="flow" d="M586 100 H626" marker-end="url(#ah2)"/>
+    <rect class="box" x="626" y="70" width="150" height="60" rx="10"/>
+    <text class="t" x="644" y="92">transition()</text><text class="ts" x="644" y="111">pure &#183; total</text>
+    <path class="flow" d="M776 100 H816" marker-end="url(#ah2)"/>
+    <rect class="box" x="816" y="52" width="110" height="96" rx="10"/>
+    <text class="ts" x="832" y="78">projections</text>
+    <text class="t" x="832" y="100">orders</text><text class="t" x="832" y="120">positions</text><text class="t" x="832" y="140">fills</text>
+    <path class="flow dash" d="M881 148 C881 185 496 190 496 148" marker-end="url(#ah2)"/>
+    <text class="ts" x="470" y="182" style="fill:var(--dimr)">rebuild by replay</text>
+  </svg>

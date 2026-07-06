@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="360" viewBox="0 0 940 360" role="img" aria-label="Order state machine">
+<style>
+  text{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+  .box{fill:#101614;stroke:#26362f;stroke-width:1}
+  .box.hl{stroke:#22e07b} .box.warn{stroke:#fbbf24} .box.bad{stroke:#f87171}
+  .box.led{fill:#0c1512;stroke:#1d2a25}
+  .t{fill:#eaf5ef;font-size:13px;font-weight:600}
+  .ts{fill:#7d928a;font-size:11px}
+  .tg{fill:#22e07b;font-size:11px} .ta{fill:#fbbf24;font-size:11px}
+  .tr{fill:#f87171;font-size:11px} .tv{fill:#a78bfa;font-size:11px}
+  .flow{stroke:#5e7268;stroke-width:1.4;fill:none}
+  .flow.g{stroke:#22e07b} .flow.a{stroke:#fbbf24} .flow.r{stroke:#f87171}
+  .flow.dash{stroke-dasharray:4 4;stroke:#7d928a}
+  .grp{fill:none;stroke:#1d2a25;stroke-dasharray:3 5}
+</style>
+<rect x="0" y="0" width="940" height="360" rx="14" fill="#0d1210"/>
+    <defs><marker id="ah3" markerWidth="8" markerHeight="8" refX="6.5" refY="3" orient="auto"><path d="M0 0l6 3-6 3z" fill="#5e7268"/></marker>
+      <marker id="ah3g" markerWidth="8" markerHeight="8" refX="6.5" refY="3" orient="auto"><path d="M0 0l6 3-6 3z" fill="#22e07b"/></marker>
+      <marker id="ah3v" markerWidth="8" markerHeight="8" refX="6.5" refY="3" orient="auto"><path d="M0 0l6 3-6 3z" fill="#a78bfa"/></marker></defs>
+    <!-- happy path row y=40 -->
+    <rect class="box" x="16" y="30" width="104" height="44" rx="8"/><text class="t" x="34" y="57">CREATED</text>
+    <path class="flow g" d="M120 52 H156" marker-end="url(#ah3g)"/>
+    <rect class="box" x="156" y="30" width="118" height="44" rx="8"/><text class="t" x="172" y="57">SUBMITTING</text>
+    <path class="flow g" d="M274 52 H310" marker-end="url(#ah3g)"/>
+    <rect class="box hl" x="310" y="30" width="104" height="44" rx="8"/><text class="t" x="330" y="57">WORKING</text>
+    <path class="flow g" d="M414 52 H450" marker-end="url(#ah3g)"/>
+    <rect class="box hl" x="450" y="30" width="104" height="44" rx="8"/><text class="t" x="468" y="57">PARTIAL</text>
+    <path class="flow g" d="M554 52 H590" marker-end="url(#ah3g)"/>
+    <rect class="box" x="590" y="30" width="104" height="44" rx="8"/><text class="tg" x="612" y="57">FILLED</text>
+    <text class="ts" x="333" y="20">acked</text><text class="ts" x="470" y="20">fill</text><text class="ts" x="600" y="20">fully filled</text>
+
+    <!-- partial self loop -->
+    <path class="flow g" d="M502 30 C502 8 450 8 466 26" marker-end="url(#ah3g)"/>
+
+    <!-- cancel path y=140 -->
+    <rect class="box warn" x="360" y="132" width="150" height="46" rx="8"/><text class="t" x="376" y="160">CANCEL_PENDING</text>
+    <path class="flow" d="M362 92 C340 118 372 120 400 130" marker-end="url(#ah3)"/>
+    <text class="ts" x="300" y="120">cancel req</text>
+    <path class="flow" d="M510 150 H560 C590 150 600 100 640 78" marker-end="url(#ah3)"/>
+    <text class="ts" x="566" y="140">or fills first</text>
+    <rect class="box" x="330" y="220" width="128" height="46" rx="8"/><text class="tr" x="352" y="248">CANCELED</text>
+    <path class="flow" d="M435 178 V220" marker-end="url(#ah3)"/>
+    <path class="flow dash" d="M360 44 C210 70 214 236 330 240" marker-end="url(#ah3)"/>
+    <text class="ts" x="150" y="150">unsolicited cancel</text>
+    <text class="ts" x="150" y="167">(STP) from WORKING</text>
+
+    <!-- unknown / reconcile -->
+    <rect class="box warn" x="156" y="120" width="112" height="46" rx="8"/><text class="ta" x="178" y="148">UNKNOWN</text>
+    <path class="flow a" d="M214 74 V120" marker-end="url(#ah3)"/>
+    <text class="ts" x="222" y="100">timeout</text>
+    <rect class="box" x="120" y="220" width="150" height="46" rx="8"/><text class="tv" x="150" y="248">RECONCILING</text>
+    <path class="flow a" d="M210 166 V220" marker-end="url(#ah3)"/>
+
+    <!-- reconcile resolves outward -->
+    <path class="flow dash" style="stroke:var(--violet)" d="M270 236 C420 210 540 130 640 78" marker-end="url(#ah3v)"/>
+    <text class="tv" x="430" y="200">resolve &#8594; broker truth</text>
+
+    <!-- terminal reopen -->
+    <path class="flow dash" d="M640 74 C700 150 360 300 270 258" marker-end="url(#ah3)"/>
+    <text class="ts" x="640" y="300">terminal states are reopenable only via reconciliation</text>
+
+    <!-- rejected -->
+    <rect class="box bad" x="700" y="132" width="120" height="46" rx="8"/><text class="tr" x="726" y="160">REJECTED</text>
+    <path class="flow r" d="M250 66 C480 108 600 150 700 154" marker-end="url(#ah3)" style="opacity:.5"/>
+    <text class="ts" x="560" y="112" style="opacity:.7">reject</text>
+  </svg>

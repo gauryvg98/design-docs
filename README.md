@@ -14,6 +14,7 @@ self-contained topic with its own diagrams and notes.
 |-------|----------------|
 | [Multi-chain MPC custody platform](mpc-custody-platform/) | Event-driven architecture for a production BTC/ETH/TRON custody platform — indexer→wallet reconciliation, reorg safety, the MPC transfer pipeline, signed webhooks, and real-time WebSockets. Redis Streams + Pub/Sub on PostgreSQL. |
 | [ChadWallet — Solana trading app](chadwallet-solana-trading/) | Non-custodial real-time Solana meme-coin trading app — cache-first poller-driven backend, a websocket hub that fans one upstream fetch out to all viewers, and a browser-signed (Privy MPC) swap pipeline. Go + Next.js, no database. |
+| [Sentinel — execution-integrity-first OMS](sentinel-oms/) | Order management system for automated crypto trading — an append-only event ledger with a pure state machine, rebuildable projections, and a reconciler that halts on genuine ledger-vs-broker divergence ("halt, don't absorb"). A fleet of per-symbol bots on one account, risk sized to the stop. Python / asyncio + PostgreSQL. |
 
 <!-- Add new topics as siblings: a folder with its own README.md + diagrams/ -->
 

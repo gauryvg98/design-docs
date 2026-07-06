@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="330" viewBox="0 0 940 330" role="img" aria-label="Reconciliation decision flow">
+<style>
+  text{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+  .box{fill:#101614;stroke:#26362f;stroke-width:1}
+  .box.hl{stroke:#22e07b} .box.warn{stroke:#fbbf24} .box.bad{stroke:#f87171}
+  .box.led{fill:#0c1512;stroke:#1d2a25}
+  .t{fill:#eaf5ef;font-size:13px;font-weight:600}
+  .ts{fill:#7d928a;font-size:11px}
+  .tg{fill:#22e07b;font-size:11px} .ta{fill:#fbbf24;font-size:11px}
+  .tr{fill:#f87171;font-size:11px} .tv{fill:#a78bfa;font-size:11px}
+  .flow{stroke:#5e7268;stroke-width:1.4;fill:none}
+  .flow.g{stroke:#22e07b} .flow.a{stroke:#fbbf24} .flow.r{stroke:#f87171}
+  .flow.dash{stroke-dasharray:4 4;stroke:#7d928a}
+  .grp{fill:none;stroke:#1d2a25;stroke-dasharray:3 5}
+</style>
+<rect x="0" y="0" width="940" height="330" rx="14" fill="#0d1210"/>
+    <defs><marker id="ah4" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#5e7268"/></marker></defs>
+    <rect class="box" x="16" y="140" width="150" height="52" rx="9"/><text class="t" x="32" y="166">query broker</text><text class="ts" x="32" y="184">order truth + fills</text>
+    <path class="flow" d="M166 166 H206" marker-end="url(#ah4)"/>
+
+    <!-- absent diamond -->
+    <path class="box" d="M266 128 L316 166 L266 204 L216 166 Z"/><text class="ts" x="243" y="163">order</text><text class="ts" x="240" y="179">absent?</text>
+    <path class="flow" d="M266 204 V236" marker-end="url(#ah4)"/><text class="ts" x="272" y="224">yes + local fills</text>
+    <rect class="box bad" x="206" y="236" width="120" height="46" rx="8"/><text class="tr" x="232" y="264">HALT</text>
+
+    <path class="flow g" d="M316 166 H360" marker-end="url(#ah4)"/><text class="tg" x="320" y="156">no</text>
+    <rect class="box" x="360" y="140" width="150" height="52" rx="9"/><text class="t" x="376" y="166">back-fill fills</text><text class="ts" x="376" y="184">exec-id dedup</text>
+    <path class="flow" d="M510 166 H548" marker-end="url(#ah4)"/>
+
+    <!-- compare diamond -->
+    <path class="box" d="M610 118 L672 166 L610 214 L548 166 Z"/><text class="ts" x="588" y="162">booked</text><text class="ts" x="588" y="178">vs broker</text>
+
+    <!-- booked > broker -->
+    <path class="flow r" d="M610 118 V70 H500" marker-end="url(#ah4)"/><text class="tr" x="516" y="60">booked &gt; broker</text>
+    <rect class="box bad" x="380" y="46" width="120" height="46" rx="8"/><text class="tr" x="406" y="74">HALT</text>
+    <text class="ts" x="384" y="108" style="opacity:.8">invented exposure</text>
+
+    <!-- transient short -->
+    <path class="flow a" d="M672 166 H720" marker-end="url(#ah4)"/><text class="ta" x="676" y="156">booked &lt; broker</text>
+    <path class="box warn" d="M782 128 L826 166 L782 204 L738 166 Z"/><text class="ts" x="762" y="163">retries</text><text class="ts" x="765" y="179">left?</text>
+    <path class="flow a" d="M782 204 V236 H720" marker-end="url(#ah4)"/><text class="ta" x="726" y="226">yes</text>
+    <rect class="box warn" x="600" y="236" width="120" height="46" rx="8"/><text class="ta" x="614" y="258">retry query</text><text class="ts" x="614" y="274">feed catches up</text>
+    <path class="flow" d="M600 259 H520 C450 259 440 210 470 195" marker-end="url(#ah4)" style="opacity:.5"/>
+    <path class="flow r" d="M826 166 H872" marker-end="url(#ah4)"/><text class="tr" x="836" y="156">no</text>
+    <rect class="box bad" x="872" y="140" width="56" height="52" rx="8"/><text class="tr" x="882" y="170">HALT</text>
+
+    <!-- resolve -->
+    <path class="flow g" d="M610 214 V270" marker-end="url(#ah4)"/><text class="tg" x="618" y="250">equal</text>
+    <rect class="box hl" x="540" y="270" width="150" height="46" rx="8"/><text class="tg" x="556" y="298">resolve &#8594; truth</text>
+  </svg>
