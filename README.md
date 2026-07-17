@@ -1,5 +1,7 @@
 # Design Docs
 
+**Rendered live on my portfolio:** [portfolio-gauryvg98s-projects.vercel.app/#docs](https://portfolio-gauryvg98s-projects.vercel.app/#docs)
+
 A running collection of architecture write-ups and diagrams for systems I've designed and
 built — backend, blockchain, and event-driven infrastructure. Each folder is a
 self-contained topic with its own diagrams and notes.
