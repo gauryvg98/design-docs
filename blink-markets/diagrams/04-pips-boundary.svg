@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="360" viewBox="0 0 960 360" role="img" aria-label="blink.markets pips at the boundary">
+  <rect x="0" y="0" width="960" height="360" rx="14" fill="#0d1210" />
+  <defs>
+    <marker id="ahg" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#22e07b" /></marker>
+  </defs>
+
+  <text x="30" y="44" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#eaf5ef" font-size="14px" font-weight="600">Pips at the boundary · one conversion, once</text>
+  <text x="30" y="66" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">the wire is pips; the app is cents. everything inside works in cents against a 100¢ payout — so the mistake can only live in one place</text>
+
+  <!-- Venue / wire -->
+  <rect x="30" y="96" width="300" height="140" rx="10" fill="#101614" stroke="#26362f" stroke-width="1" />
+  <text x="48" y="124" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">Venue · the wire (pips)</text>
+  <text x="48" y="150" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">1 pip = 1/100 of a cent</text>
+  <text x="48" y="172" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">book level ....... 4500</text>
+  <text x="48" y="192" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">payout .......... 10,000 pips</text>
+  <text x="48" y="212" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">10-pip grid · whole units</text>
+
+  <!-- boundary membrane -->
+  <line x1="480" y1="80" x2="480" y2="252" stroke="#22e07b" stroke-width="1.4" stroke-dasharray="5 5" />
+  <text x="480" y="76" text-anchor="middle" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#22e07b" font-size="11px">the boundary</text>
+  <text x="480" y="274" text-anchor="middle" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="10px">pipsToCents / centsToPips</text>
+
+  <path d="M330 150 H474" marker-end="url(#ahg)" stroke="#22e07b" stroke-width="1.4" fill="none" />
+  <path d="M486 196 H630" marker-end="url(#ahg)" stroke="#22e07b" stroke-width="1.4" fill="none" />
+
+  <!-- App / cents -->
+  <rect x="630" y="96" width="300" height="140" rx="10" fill="#101614" stroke="#22e07b" stroke-width="1" />
+  <text x="648" y="124" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">App · cents</text>
+  <text x="648" y="150" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">ticket · payout · UI</text>
+  <text x="648" y="172" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">book level ....... 45.00¢</text>
+  <text x="648" y="192" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">payout .......... 100¢ = $1.00</text>
+  <text x="648" y="212" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#22e07b" font-size="11px">YES + NO = 100¢ (exact, in pips)</text>
+
+  <!-- four faces -->
+  <rect x="30" y="288" width="900" height="52" rx="10" fill="#140f0e" stroke="#3a2622" stroke-width="1" />
+  <text x="48" y="310" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#ff6b52" font-size="11px" font-weight="600">read pips as cents — one bug, four faces:</text>
+  <text x="48" y="328" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">balance ×100 · tape prints of 5800¢ · an empty book (tick≤99 filter) · rejected buys (0.99¢ under the 4¢ wing)</text>
+</svg>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="360" viewBox="0 0 960 360" role="img" aria-label="blink.markets whole-round oracle">
+  <rect x="0" y="0" width="960" height="360" rx="14" fill="#0d1210" />
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#5e7268" /></marker>
+  </defs>
+
+  <text x="30" y="44" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#eaf5ef" font-size="14px" font-weight="600">The whole-round oracle · why the price path lives server-side</text>
+  <text x="30" y="66" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">the edge server is the only party connected for the entire round, so it is the only one that can hand a latecomer what it missed</text>
+
+  <!-- timeline baseline -->
+  <line x1="60" y1="190" x2="620" y2="190" stroke="#26362f" stroke-width="1" />
+  <text x="56" y="214" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="10px">T0 · open · strike</text>
+  <text x="566" y="214" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="10px">+60s · close</text>
+
+  <!-- recorded price path -->
+  <polyline points="60,150 100,142 140,158 180,138 220,150 260,132 300,146 340,128 380,140 420,152 460,134 500,148 540,138 580,150 620,144" fill="none" stroke="#22e07b" stroke-width="1.8" />
+  <g fill="#22e07b">
+    <circle cx="60" cy="150" r="2.4" /><circle cx="140" cy="158" r="2.4" /><circle cx="220" cy="150" r="2.4" /><circle cx="300" cy="146" r="2.4" /><circle cx="380" cy="140" r="2.4" /><circle cx="460" cy="134" r="2.4" /><circle cx="540" cy="138" r="2.4" /><circle cx="620" cy="144" r="2.4" />
+  </g>
+  <text x="60" y="112" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#22e07b" font-size="10px">server records the mark ~3×/s, keyed by timestamp</text>
+
+  <!-- A joins at open -->
+  <text x="60" y="248" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">A joins at open → sees all of it</text>
+
+  <!-- B joins at +40s -->
+  <line x1="440" y1="120" x2="440" y2="230" stroke="#5e7268" stroke-width="1" stroke-dasharray="4 4" />
+  <text x="330" y="278" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#eaf5ef" font-size="11px">B joins · +40s — has seen none of it</text>
+
+  <!-- Without server -->
+  <rect x="678" y="86" width="252" height="98" rx="10" fill="#101614" stroke="#26362f" stroke-width="1" />
+  <text x="696" y="112" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#eaf5ef" font-size="12px" font-weight="600">B — without the server</text>
+  <circle cx="712" cy="150" r="3.4" fill="#ff6b52" />
+  <text x="730" y="146" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#ff6b52" font-size="11px">one point,</text>
+  <text x="730" y="162" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">pretending to be a chart</text>
+
+  <!-- With oracleStore -->
+  <rect x="678" y="212" width="252" height="98" rx="10" fill="#101614" stroke="#22e07b" stroke-width="1" />
+  <text x="696" y="238" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#eaf5ef" font-size="12px" font-weight="600">B — with oracleStore</text>
+  <polyline points="696,282 716,276 736,286 756,272 776,280 796,270 816,278" fill="none" stroke="#22e07b" stroke-width="1.6" />
+  <text x="828" y="282" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#22e07b" font-size="11px">real</text>
+  <text x="696" y="300" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">marks since T0 → the real round</text>
+
+  <path d="M440 175 H674" marker-end="url(#ah)" stroke="#5e7268" stroke-width="1.2" fill="none" stroke-dasharray="4 4" />
+</svg>

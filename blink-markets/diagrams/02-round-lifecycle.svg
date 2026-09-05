@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="330" viewBox="0 0 960 330" role="img" aria-label="blink.markets round lifecycle">
+  <rect x="0" y="0" width="960" height="330" rx="14" fill="#0d1210" />
+  <defs>
+    <marker id="ahg" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#22e07b" /></marker>
+    <marker id="aha" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0l7 3-7 3z" fill="#f2b134" /></marker>
+  </defs>
+
+  <text x="30" y="44" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#eaf5ef" font-size="14px" font-weight="600">Round lifecycle · every market is the same 60 seconds</text>
+  <text x="30" y="66" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">the desk is a projection — it renders the state the venue publishes, never decides the winner</text>
+
+  <rect x="30" y="120" width="196" height="96" rx="10" fill="#101614" stroke="#26362f" stroke-width="1" />
+  <text x="48" y="150" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">OPEN</text>
+  <text x="48" y="172" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#22e07b" font-size="11px">strike := spot</text>
+  <text x="48" y="190" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">t = 0s</text>
+
+  <rect x="266" y="120" width="196" height="96" rx="10" fill="#101614" stroke="#26362f" stroke-width="1" />
+  <text x="284" y="150" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">TRADING</text>
+  <text x="284" y="172" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">book live · YES/NO ¢</text>
+  <text x="284" y="190" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">spot tracked vs strike</text>
+
+  <rect x="502" y="120" width="176" height="96" rx="10" fill="#101614" stroke="#26362f" stroke-width="1" />
+  <text x="520" y="150" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">FROZEN</text>
+  <text x="520" y="172" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#f2b134" font-size="11px">orders halt</text>
+  <text x="520" y="190" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#7d928a" font-size="11px">at the freeze</text>
+
+  <rect x="718" y="120" width="212" height="96" rx="10" fill="#101614" stroke="#22e07b" stroke-width="1" />
+  <text x="736" y="150" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#eaf5ef" font-size="13px" font-weight="600">SETTLED</text>
+  <text x="736" y="172" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#22e07b" font-size="11px">close ≥ strike → YES $1.00</text>
+  <text x="736" y="190" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#ff6b52" font-size="11px">else → NO $1.00</text>
+
+  <path d="M226 168 H266" marker-end="url(#ahg)" stroke="#22e07b" stroke-width="1.4" fill="none" />
+  <path d="M462 168 H502" marker-end="url(#aha)" stroke="#f2b134" stroke-width="1.4" fill="none" />
+  <path d="M678 168 H718" marker-end="url(#ahg)" stroke="#22e07b" stroke-width="1.4" fill="none" />
+
+  <!-- roll back -->
+  <path d="M824 216 V270 H128 V216" marker-end="url(#ahg)" stroke="#22e07b" stroke-width="1.4" fill="none" stroke-dasharray="5 4" />
+  <text x="430" y="290" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" fill="#22e07b" font-size="11px">roll · the next 60-second market opens immediately</text>
+</svg>
